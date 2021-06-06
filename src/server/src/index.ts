@@ -43,7 +43,7 @@ const main = async () => {
   });
   apolloServer.applyMiddleware({ app, cors: false });
   app.listen(process.env.PORT!, () => {
-    console.log(`Server running on http://localhost:${process.env.PORT} 🚀`);
+    console.log(`Server running on http://localhost:${process.env.PORT} ✅`);
   });
 };
 main().catch((e) => {
