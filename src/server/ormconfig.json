@@ -1,0 +1,11 @@
+
+{
+   "type": "postgres",
+   "host": "localhost",
+   "port": 5432,
+   "username": "lukehowsam",
+   "password": "123",
+   "database": "tmtodos",
+   "entities": ["dist/entities/*.js"],
+   "migrations": ["dist/migrations/*.js"]
+ }

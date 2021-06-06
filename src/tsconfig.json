@@ -1,0 +1,30 @@
+{
+    "compilerOptions": {
+      "allowJs": true,
+      "alwaysStrict": true,
+      "allowSyntheticDefaultImports": true,
+      "module": "esnext",
+      "moduleResolution": "node",
+      "noEmit": true,
+      "noImplicitAny": true,
+      "strict": true,
+      "strictNullChecks": true,
+      "jsx": "preserve",
+      "target": "es6",
+      "lib": [
+        "dom",
+        "dom.iterable",
+        "esnext"
+      ],
+      "skipLibCheck": true,
+      "esModuleInterop": true,
+      "forceConsistentCasingInFileNames": true,
+      "resolveJsonModule": true,
+      "baseUrl": ".",
+      "paths": {
+        "@server/*": ["./server/src/*"],
+        "@web/*": ["./web/src/*"]
+      },
+      "sourceMap": true
+    }
+  }
