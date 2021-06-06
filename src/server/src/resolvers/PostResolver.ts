@@ -1,35 +1,35 @@
 import { MyContext } from 'src/types';
 import {
   Arg,
-  Args,
   Ctx,
   Field,
+  InputType,
   Mutation,
   ObjectType,
   Resolver,
 } from 'type-graphql';
 import { Post } from '../entities/Post';
 
-@ObjectType()
-class PostResponse {
-  @Field(() => String, { nullable: true })
-  errors?: String;
+@InputType()
+class PostInput {
+  @Field()
+  title: string;
 
-  @Field(() => Post, { nullable: true })
-  Post?: Post;
+  @Field()
+  picture: string;
 }
 
 @Resolver(Post)
 export class PostResolver {
-  @Mutation(() => PostResponse)
+  @Mutation(() => Boolean)
   async createPost(
-    @Arg('name') name: String,
-    @Arg('picture') picture: String,
+    @Arg('input') input: PostInput,
     @Ctx() { req }: MyContext,
-  ): Promise<any> {
+  ) {
     console.log('req.body', req.body);
     console.log('req.params', req.params);
-    console.log('picture', picture);
-    console.log('name', name);
+    console.log('picture', input.picture);
+    console.log('title', input.title);
+    return true;
   }
 }

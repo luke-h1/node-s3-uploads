@@ -6,11 +6,10 @@ export class Post extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Field()
+  @Field(() => String)
   @Column()
   name: string;
 
-  @Field()
   @Column()
   pictureUrl: string;
 }

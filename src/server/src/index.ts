@@ -9,6 +9,7 @@ import cors from 'cors';
 import { __prod__ } from './constants';
 import { Post } from './entities/Post';
 import { HelloResolver } from './resolvers/HelloResolver';
+import { PostResolver } from './resolvers/PostResolver';
 
 const main = async () => {
   await createConnection({
@@ -33,7 +34,7 @@ const main = async () => {
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [HelloResolver],
+      resolvers: [HelloResolver, PostResolver],
       validate: false,
     }),
     context: ({ req, res }) => ({
