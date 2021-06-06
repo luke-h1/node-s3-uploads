@@ -1,6 +1,12 @@
 import { MyContext } from 'src/types';
 import {
-  Arg, Args, Ctx, Field, Mutation, ObjectType, Resolver,
+  Arg,
+  Args,
+  Ctx,
+  Field,
+  Mutation,
+  ObjectType,
+  Resolver,
 } from 'type-graphql';
 import { Post } from '../entities/Post';
 
@@ -15,13 +21,15 @@ class PostResponse {
 
 @Resolver(Post)
 export class PostResolver {
-    @Mutation(() => PostResponse)
+  @Mutation(() => PostResponse)
   async createPost(
-        @Arg('name') name: String,
-        @Arg('picture') picture: String,
-        @Ctx() { req }: MyContext,
-  ): Promise<PostResponse> {
+    @Arg('name') name: String,
+    @Arg('picture') picture: String,
+    @Ctx() { req }: MyContext,
+  ): Promise<any> {
     console.log('req.body', req.body);
     console.log('req.params', req.params);
+    console.log('picture', picture);
+    console.log('name', name);
   }
 }

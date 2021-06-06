@@ -20,7 +20,7 @@ export const uploadFile = async (file: any) => {
     Body: fileStream,
   };
 
-  S3.upload(params, (e, data) => {
+  S3.upload(params, (e: any, data: any) => {
     if (e) {
       console.log(e);
       throw new Error(e);
