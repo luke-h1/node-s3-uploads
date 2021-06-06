@@ -2,22 +2,24 @@ import 'reflect-metadata';
 import 'dotenv-safe/config';
 import express from 'express';
 import path from 'path';
-import { ApolloServer } from 'apollo-server-express';
-import { buildSchema } from 'type-graphql';
 import { createConnection } from 'typeorm';
 import cors from 'cors';
+import fs from 'fs';
+import util from 'util';
+import multer from 'multer';
 import { __prod__ } from './constants';
 import { Post } from './entities/Post';
-import { HelloResolver } from './resolvers/HelloResolver';
-import { PostResolver } from './resolvers/PostResolver';
+import { uploadFile, getFileStream } from './utils/uploadPicture';
+
+const upload = multer({ dest: 'uploads/' });
 
 const main = async () => {
   await createConnection({
     type: 'postgres',
     url: process.env.DATABASE_URL,
-    logging: !__prod__,
+    logging: true,
     migrations: [path.join(__dirname, './migrations/*')],
-    synchronize: !__prod__,
+    synchronize: true,
     entities: [Post],
   });
   // await conn.runMigrations();
@@ -32,17 +34,26 @@ const main = async () => {
     }),
   );
 
-  const apolloServer = new ApolloServer({
-    schema: await buildSchema({
-      resolvers: [HelloResolver, PostResolver],
-      validate: false,
-    }),
-    context: ({ req, res }) => ({
-      req,
-      res,
-    }),
+  const unlinkFile = util.promisify(fs.unlink);
+
+  app.post('/images', upload.single('picture'), async (req, res) => {
+    const file = req.file;
+    console.log(file);
+    await uploadFile(file);
+    // err handling here...
+    const result = await uploadFile(file);
+    await unlinkFile(file.path);
+
+    console.log(result);
+    res.send(result);
   });
-  apolloServer.applyMiddleware({ app, cors: false });
+
+  app.get('/images/:key', (req, res) => {
+    const key = req.params.key;
+    const readStream = getFileStream(key);
+    readStream.pipe;
+  });
+
   app.listen(process.env.PORT!, () => {
     console.log(`Server running on http://localhost:${process.env.PORT} ✅`);
   });
