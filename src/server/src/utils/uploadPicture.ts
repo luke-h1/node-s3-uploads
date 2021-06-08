@@ -11,7 +11,7 @@ export const S3 = new AWS.S3({
   },
 });
 
-async function getSignedUrl(key) {
+async function getSignedUrl(key: string) {
   return new Promise((resolve, reject) => {
     const params = { Bucket: process.env.AWS_BUCKET_NAME, Key: key };
     S3.getSignedUrl('getObject', params, (err, url) => {
@@ -33,7 +33,7 @@ export const uploadFile = async (file: any) => {
   };
 
   try {
-    S3.upload(params, (e: any, data: any) => {
+    S3.upload(params, (e: any, _: any) => {
       if (e) {
         console.log(e);
         throw new Error(e);
@@ -55,5 +55,6 @@ export const getFileStream = (fileKey: string) => {
     Key: fileKey,
     Bucket: process.env.AWS_BUCKET_NAME,
   };
-  return S3.getObject(downloadParams).createReadStream();
+  // @ts-ignore
+  return S3.getObject(downloadParams).createReadStream() as string;
 };

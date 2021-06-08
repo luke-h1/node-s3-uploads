@@ -4,6 +4,6 @@ export class Post extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column()
-  pictureUrl: string;
+  @Column({ unique: true })
+  pictureUrl!: string;
 }

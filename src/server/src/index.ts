@@ -8,7 +8,7 @@ import fs from 'fs';
 import util from 'util';
 import multer from 'multer';
 import { __prod__ } from './constants';
-import { Post } from './entities/Post';
+import { Post } from './entity/Post';
 import { uploadFile, getFileStream } from './utils/uploadPicture';
 
 const upload = multer({ dest: 'uploads/' });
@@ -17,16 +17,20 @@ const main = async () => {
   await createConnection({
     type: 'postgres',
     url: process.env.DATABASE_URL,
-    logging: true,
-    migrations: [path.join(__dirname, './migrations/*')],
-    synchronize: true,
-    entities: [Post],
+    logging: !__prod__,
+    synchronize: !__prod__,
+    migrations: [path.join(__dirname, './migrations/*.*')],
+    entities: [
+      `${__dirname}/entity/*.*`,
+    ],
   });
-  // await conn.runMigrations();
+  await Post.create({
+    pictureUrl: 'https://www.google.com',
+  }).save();
 
   const app = express();
 
-  app.set('trust proxy', 1); // Let Express know about nginx proxies
+  app.set('trust proxy', 1);
   app.use(
     cors({
       origin: process.env.CORS_ORIGIN!,
@@ -36,21 +40,22 @@ const main = async () => {
 
   const unlinkFile = util.promisify(fs.unlink);
 
-  app.post('/images', upload.single('picture'), async (req, res) => {
+  app.post('/images', upload.single('picture'), async (req, _) => {
     const file = req.file;
     console.log(file);
     await uploadFile(file);
     // err handling here...
     const result = await uploadFile(file);
     await unlinkFile(file.path);
-
-    console.log(result);
-    res.send(result);
+    return Post.create({
+      pictureUrl: (result) as string,
+    }).save();
   });
 
-  app.get('/images/:key', (req, res) => {
+  app.get('/images/:key', (req, _) => {
     const key = req.params.key;
     const readStream = getFileStream(key);
+    // @ts-ignore
     readStream.pipe;
   });
 

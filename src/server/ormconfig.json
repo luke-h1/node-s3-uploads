@@ -5,7 +5,7 @@
    "port": 5432,
    "username": "lukehowsam",
    "password": "123",
-   "database": "node-s3-uploads",
-   "entities": ["dist/entities/*.js"],
-   "migrations": ["dist/migrations/*.js"]
+   "database": "node-s3-uploads-2",
+   "entities": ["src/entity/*.*"],
+   "migrations": ["src/migrations/*.js"]
  }
